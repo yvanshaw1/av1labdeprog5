@@ -1,0 +1,234 @@
+:root {
+  --color-background: #f5f6f8;
+  --color-surface: #ffffff;
+  --color-border: #d5d8de;
+  --color-text: #1c1f24;
+  --color-muted: #5c636e;
+  --color-accent: #1f4f8b;
+  --color-danger: #a4262c;
+  --color-danger-surface: #fdecee;
+  color-scheme: light dark;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+/* Tokens do tema escuro: so as cores mudam, o resto do CSS nao sabe do tema. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: #14171b;
+    --color-surface: #1c2026;
+    --color-border: #333941;
+    --color-text: #e6e9ee;
+    --color-muted: #9aa3af;
+    --color-accent: #7fb3f0;
+    --color-danger: #f28b90;
+    --color-danger-surface: #2c1a1c;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--color-background);
+  color: var(--color-text);
+}
+
+.page {
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 2rem 1rem 4rem;
+}
+
+h1 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+/* ─── Abas de recurso ─────────────────────────────────────────────────────── */
+
+.tab-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 0.6rem;
+}
+
+.tab {
+  border-color: transparent;
+  background: transparent;
+  color: var(--color-muted);
+}
+
+.tab-active {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+/* ─── Formulários ─────────────────────────────────────────────────────────── */
+
+.resource-form {
+  display: grid;
+  gap: 0.35rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 1rem 1.25rem 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.resource-form h2 {
+  font-size: 1rem;
+  margin: 0 0 0.5rem;
+}
+
+.resource-form > label {
+  font-size: 0.8rem;
+  color: var(--color-muted);
+}
+
+.resource-form input,
+.resource-form select,
+.resource-form textarea {
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font: inherit;
+  margin-bottom: 0.5rem;
+  background: var(--color-surface);
+  color: inherit;
+}
+
+.resource-form textarea {
+  resize: vertical;
+}
+
+.resource-form-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.service-picker {
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  margin: 0 0 0.75rem;
+  padding: 0.5rem 0.75rem 0.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.25rem;
+}
+
+.service-picker legend {
+  font-size: 0.8rem;
+  color: var(--color-muted);
+  padding: 0 0.25rem;
+}
+
+.service-picker label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+}
+
+.service-picker input {
+  margin: 0;
+}
+
+/* ─── Botões ──────────────────────────────────────────────────────────────── */
+
+button {
+  padding: 0.45rem 0.9rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-surface);
+  font: inherit;
+  cursor: pointer;
+}
+
+button:hover:not(:disabled) {
+  border-color: var(--color-muted);
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ─── Tabela ──────────────────────────────────────────────────────────────── */
+
+.resource-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.resource-table th,
+.resource-table td {
+  text-align: left;
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.9rem;
+  vertical-align: middle;
+}
+
+.resource-table th {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-muted);
+}
+
+.resource-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.resource-table-actions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.resource-table-actions button {
+  padding: 0.3rem 0.65rem;
+  font-size: 0.85rem;
+}
+
+/* ─── Estados ─────────────────────────────────────────────────────────────── */
+
+.empty-state {
+  color: var(--color-muted);
+  background: var(--color-surface);
+  border: 1px dashed var(--color-border);
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.error-banner {
+  background: var(--color-danger-surface);
+  border: 1px solid var(--color-danger);
+  color: var(--color-danger);
+  border-radius: 6px;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.9rem;
+}
+
+.list-status {
+  color: var(--color-muted);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+/* O anel de foco do navegador some sobre fundo escuro; este acompanha o tema. */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}

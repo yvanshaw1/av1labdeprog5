@@ -1,0 +1,37 @@
+{
+  "compilerOptions": {
+    "target": "ES2023",
+    "lib": ["ES2023"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+
+    "experimentalDecorators": true,
+    // Deliberadamente desligado. Toda coluna das entidades declara `type`, entao
+    // o TypeORM nunca precisa do `design:type`. Ligado, o compilador emite uma
+    // referencia direta a classe alvo de cada relacao: Appointment e
+    // AppointmentItem se referenciam, e o modulo carregado primeiro estoura com
+    // "Cannot access 'Appointment' before initialization" no bundle compilado.
+    "emitDecoratorMetadata": false,
+
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+
+    "outDir": "dist",
+    "rootDir": "src",
+    "sourceMap": true,
+    "noEmit": true
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
+}

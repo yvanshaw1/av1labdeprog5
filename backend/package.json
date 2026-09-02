@@ -1,0 +1,39 @@
+{
+  "name": "av1labdeprog5-backend",
+  "version": "1.0.0",
+  "description": "API de agendamento de estetica automotiva — AV01 de Laboratorio de Programacao V",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc --project tsconfig.build.json",
+    "start": "node dist/server.js",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --max-warnings 0",
+    "typeorm": "node --import tsx ./node_modules/typeorm/cli.js",
+    "migration:generate": "npm run typeorm -- migration:generate ./src/migrations/Migration --dataSource ./src/config/data-source.ts",
+    "migration:run": "npm run typeorm -- migration:run --dataSource ./src/config/data-source.ts",
+    "migration:revert": "npm run typeorm -- migration:revert --dataSource ./src/config/data-source.ts"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "pg": "^8.16.3",
+    "reflect-metadata": "^0.2.2",
+    "typeorm": "^0.3.30",
+    "typeorm-naming-strategies": "^4.1.0",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@types/express": "^5.0.4",
+    "@types/node": "^24.10.1",
+    "eslint": "^9.39.1",
+    "tsx": "^4.20.7",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.46.4"
+  }
+}

@@ -1,0 +1,12 @@
+node_modules/
+dist/
+build/
+coverage/
+
+# Segredos: nenhuma variante de .env entra no repositorio.
+.env
+.env.*
+
+*.log
+.DS_Store
+Thumbs.db
