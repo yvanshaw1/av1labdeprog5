@@ -15,6 +15,7 @@ import { vehicleMapper } from "./mappers/vehicle.mapper.js"
 import { globalExceptionHandler } from "./middlewares/global-exception.handler.js"
 import { jsonBodyFailureTranslator, jsonBodyParser } from "./middlewares/json-body.middleware.js"
 import { routeNotFoundMiddleware } from "./middlewares/route-not-found.middleware.js"
+import { buildWebAppRoutes } from "./middlewares/web-app.middleware.js"
 import type { AppointmentRepository } from "./repositories/appointment.repository.js"
 import type { ClientRepository } from "./repositories/client.repository.js"
 import type { ServiceRepository } from "./repositories/service.repository.js"
@@ -101,8 +102,11 @@ function buildResources(repositories: ApplicationRepositories): MountedResource[
  * Composicao das camadas e montagem da aplicacao Express.
  *
  * Nao abre porta de proposito: quem escuta e' o `server.ts`.
+ *
+ * @param webAppDirectory Pasta da interface compilada. Informada, a aplicacao
+ *                        serve API e site na mesma porta; omitida, so a API.
  */
-export function createApplication(repositories: ApplicationRepositories): Express {
+export function createApplication(repositories: ApplicationRepositories, webAppDirectory?: string): Express {
   const application = express()
   application.use(jsonBodyParser)
   // Logo depois do parser, para traduzir as falhas dele antes de qualquer rota.
@@ -111,6 +115,11 @@ export function createApplication(repositories: ApplicationRepositories): Expres
   application.use("/health", buildHealthRoutes())
   for (const resource of buildResources(repositories)) {
     application.use(resource.path, resource.router)
+  }
+
+  // Depois da API: a interface so responde nos caminhos que a API nao atende.
+  if (webAppDirectory !== undefined) {
+    application.use(buildWebAppRoutes(webAppDirectory))
   }
 
   // A ordem importa: rota nao encontrada primeiro, handler de excecao por ultimo.

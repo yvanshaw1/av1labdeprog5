@@ -108,7 +108,15 @@ A migration cria a extensão `uuid-ossp` antes das tabelas — é ela que fornec
 
 Para gerar uma nova migration a partir das entidades: `npm run migration:generate`. O CLI do TypeORM escreve `import { MigrationInterface, QueryRunner }` — troque por `import type`, senão o ESM tenta importar em tempo de execução dois nomes que só existem como tipo.
 
-### 4. Subir a API
+### 4. Popular o banco com dados de demonstração
+
+```bash
+cd backend && npm run seed
+```
+
+Cria três clientes, dois veículos, três serviços e dois agendamentos. **Apaga o que existir antes** — serve tanto para o primeiro uso quanto para resetar entre testes. Os totais dos agendamentos são calculados pelas regras da aplicação, não escritos no script.
+
+### 5. Subir a API
 
 ```bash
 cd backend && npm run dev
@@ -116,7 +124,7 @@ cd backend && npm run dev
 
 A API sobe em `http://localhost:3000`. Para rodar a versão compilada: `npm run build && npm start`.
 
-### 5. Subir a interface
+### 6. Subir a interface
 
 ```bash
 cd frontend && npm install && npm run dev
@@ -125,6 +133,18 @@ cd frontend && npm install && npm run dev
 O Vite sobe em `http://localhost:5173` e encaminha `/api` para a porta 3000 — não é preciso configurar CORS.
 
 A interface tem uma aba por recurso, todas com os quatro verbos. Duas se apoiam em outro recurso: a de **veículos** lista os clientes num select e mostra o dono pelo nome; a de **agendamentos** filtra os veículos pelo cliente escolhido, permite marcar vários serviços e exibe o total **calculado pelo servidor** — o formulário não tem campo de preço, de propósito.
+
+### 7. Modo demonstração: tudo numa porta só
+
+Os dois `npm run dev` acima são o ambiente de trabalho — o Vite existe para recarregar a tela a cada arquivo salvo. Para apresentar, dá para compilar a interface e servir tudo pelo Express:
+
+```bash
+cd backend && npm run demo
+```
+
+Compila o front, compila a API e sobe **um único servidor em `http://localhost:3000`**, com o site em `/` e a API em `/api`. Rotas inexistentes da API continuam respondendo Problem Details, e não a página.
+
+Se a interface não estiver compilada, a API sobe sozinha normalmente.
 
 ### Verificação
 
