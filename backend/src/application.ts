@@ -1,16 +1,13 @@
-import express, { type Express, type Router } from "express"
-import { CrudController } from "./controllers/crud.controller.js"
-import { createClientRequestSchema } from "./dtos/request/create-client.request.dto.js"
-import { updateClientRequestSchema } from "./dtos/request/update-client.request.dto.js"
-import { clientMapper } from "./mappers/client.mapper.js"
+import express, { type Express } from "express"
+import { ClientController } from "./controllers/client.controller.js"
 import { globalExceptionHandler } from "./middlewares/global-exception.handler.js"
 import { jsonBodyFailureTranslator, jsonBodyParser } from "./middlewares/json-body.middleware.js"
 import { routeNotFoundMiddleware } from "./middlewares/route-not-found.middleware.js"
 import { buildWebAppRoutes } from "./middlewares/web-app.middleware.js"
 import type { ClientRepository } from "./repositories/client.repository.js"
-import { buildCrudRoutes } from "./routes/crud-routes.js"
+import { buildClientRoutes } from "./routes/client-routes.js"
 import { buildHealthRoutes } from "./routes/health-routes.js"
-import { ClientService } from "./services/client.service.js"
+import { ClientServiceImpl } from "./services/impl/client.service.impl.js"
 
 /**
  * Repositorios que a aplicacao precisa para funcionar.
@@ -22,26 +19,6 @@ export interface ApplicationRepositories {
   readonly clientRepository: ClientRepository
 }
 
-interface MountedResource {
-  readonly path: string
-  readonly router: Router
-}
-
-function clientResource(repositories: ApplicationRepositories): MountedResource {
-  const clientService = new ClientService(repositories.clientRepository)
-  return {
-    path: "/api/clients",
-    router: buildCrudRoutes(new CrudController(clientService, clientMapper.fromEntityToResponseDto), {
-      createRequestSchema: createClientRequestSchema,
-      updateRequestSchema: updateClientRequestSchema,
-    }),
-  }
-}
-
-function buildResources(repositories: ApplicationRepositories): MountedResource[] {
-  return [clientResource(repositories)]
-}
-
 /**
  * Composicao das camadas e montagem da aplicacao Express.
  *
@@ -51,15 +28,16 @@ function buildResources(repositories: ApplicationRepositories): MountedResource[
  *                        serve API e site na mesma porta; omitida, so a API.
  */
 export function createApplication(repositories: ApplicationRepositories, webAppDirectory?: string): Express {
+  const clientService = new ClientServiceImpl(repositories.clientRepository)
+  const clientController = new ClientController(clientService)
+
   const application = express()
   application.use(jsonBodyParser)
   // Logo depois do parser, para traduzir as falhas dele antes de qualquer rota.
   application.use(jsonBodyFailureTranslator)
 
   application.use("/health", buildHealthRoutes())
-  for (const resource of buildResources(repositories)) {
-    application.use(resource.path, resource.router)
-  }
+  application.use("/api/clients", buildClientRoutes(clientController))
 
   // Depois da API: a interface so responde nos caminhos que a API nao atende.
   if (webAppDirectory !== undefined) {

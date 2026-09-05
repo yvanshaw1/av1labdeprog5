@@ -17,7 +17,11 @@ interface SourceGroupSpec {
 const CATALOG_GROUPS: SourceGroupSpec[] = [
   {
     label: "Model — entidade e regras de negócio",
-    paths: ["backend/src/models/client.entity.ts", "backend/src/services/client.service.ts"],
+    paths: [
+      "backend/src/models/client.entity.ts",
+      "backend/src/services/client.service.ts",
+      "backend/src/services/impl/client.service.impl.ts",
+    ],
   },
   {
     label: "DTO e Mapper",
@@ -32,18 +36,15 @@ const CATALOG_GROUPS: SourceGroupSpec[] = [
     label: "Repository — contrato e implementação",
     paths: [
       "backend/src/repositories/client.repository.ts",
-      "backend/src/repositories/crud.repository.ts",
       "backend/src/repositories/typeorm/typeorm-client.repository.ts",
-      "backend/src/repositories/typeorm/typeorm-crud.repository.ts",
     ],
   },
   {
     label: "MVC — Controller e verbos HTTP",
     paths: [
-      "backend/src/controllers/crud.controller.ts",
-      "backend/src/routes/crud-routes.ts",
+      "backend/src/controllers/client.controller.ts",
+      "backend/src/routes/client-routes.ts",
       "backend/src/routes/resource-identifier.schema.ts",
-      "backend/src/services/crud.service.ts",
       "backend/src/application.ts",
       "backend/src/container.ts",
     ],

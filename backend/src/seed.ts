@@ -1,6 +1,6 @@
 import { appDataSource } from "./config/data-source.js"
 import { buildTypeOrmRepositories } from "./container.js"
-import { ClientService } from "./services/client.service.js"
+import { ClientServiceImpl } from "./services/impl/client.service.impl.js"
 
 /**
  * Repovoa o banco com um cenario de demonstracao.
@@ -13,7 +13,7 @@ import { ClientService } from "./services/client.service.js"
 async function seed(): Promise<void> {
   await appDataSource.initialize()
   const repositories = buildTypeOrmRepositories(appDataSource)
-  const clientService = new ClientService(repositories.clientRepository)
+  const clientService = new ClientServiceImpl(repositories.clientRepository)
 
   for (const client of await repositories.clientRepository.findAll()) {
     await repositories.clientRepository.deleteById(client.id)

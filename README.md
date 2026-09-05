@@ -10,11 +10,11 @@
 
 | Requisito | Artefato |
 |---|---|
-| **MVC** | **Model** → `backend/src/models/client.entity.ts` (entidade) + `backend/src/services/` (regras).<br>**View** → `backend/src/dtos/response/` + `backend/src/mappers/` (a representação JSON devolvida) e o app React em `frontend/`.<br>**Controller** → `backend/src/controllers/crud.controller.ts` |
-| **Repository** | `backend/src/repositories/*.repository.ts` (interfaces) + `backend/src/repositories/typeorm/` (implementações). Os *services* dependem só da interface. |
+| **MVC** | **Model** → `backend/src/models/client.entity.ts` (entidade) + `backend/src/services/` (regras).<br>**View** → `backend/src/dtos/response/` + `backend/src/mappers/` (a representação JSON devolvida) e o app React em `frontend/`.<br>**Controller** → `backend/src/controllers/client.controller.ts` |
+| **Repository** | `backend/src/repositories/client.repository.ts` (interface) + `backend/src/repositories/typeorm/typeorm-client.repository.ts` (implementação). O *service* depende só da interface. |
 | **DTO** | `backend/src/dtos/request/` (entrada, validada com Zod) e `backend/src/dtos/response/` (saída). A entidade nunca cruza a fronteira HTTP. |
 | **Mapper** | `backend/src/mappers/client.mapper.ts` — único ponto que converte DTO ↔ entidade. |
-| **GET / POST / PUT / DELETE** | `backend/src/routes/crud-routes.ts`, montado em `backend/src/application.ts` — 5 rotas (tabela abaixo). |
+| **GET / POST / PUT / DELETE** | `backend/src/routes/client-routes.ts`, montado em `backend/src/application.ts` — 5 rotas (tabela abaixo). |
 | **ORM** | TypeORM: entidade com decorators e schema versionado por migration em `backend/src/migrations/`. |
 | **Controle de exceção** | `backend/src/exceptions/` (hierarquia) + `backend/src/middlewares/global-exception.handler.ts` (tradução única para HTTP). |
 
@@ -138,7 +138,7 @@ cd frontend && npx tsc --noEmit && npm run lint && npm run build
 
 **Aplicação separada do servidor.** `createApplication()` monta o Express sem abrir porta, recebendo os repositórios como parâmetro; `server.ts` só inicializa o banco e escuta.
 
-**A base do CRUD é descrita uma vez.** As rotas (`buildCrudRoutes`), a fronteira HTTP (`CrudController`), o `findById`/`findAll`/`delete` do service (`CrudService`) e as cinco operações de persistência (`TypeOrmCrudRepository`) são genéricos. O que é específico do cliente continua explícito: o service com suas regras, o mapper e os schemas de validação.
+**Service com interface e implementação separadas.** `ClientService` declara o contrato e `ClientServiceImpl` o cumpre. O controller depende da interface: a fronteira HTTP não precisa saber como a regra é aplicada, nem onde os dados moram. O mesmo vale um nível abaixo, entre `ClientRepository` e `TypeOrmClientRepository`.
 
 **No front, a máquina de estado do CRUD é uma só.** `useResourceCrud` cuida de carregar, editar, gravar, recarregar e exibir erro. O estado da leitura é uma união discriminada (`AsyncState`), não `items` + `isLoading` + `error` soltos: assim a tela não consegue afirmar "nenhum cadastrado" enquanto a resposta ainda está a caminho.
 

@@ -1,26 +1,11 @@
 import { Router, type RequestHandler } from "express"
-import type { ZodType } from "zod"
+import type { ClientController } from "../controllers/client.controller.js"
+import { createClientRequestSchema } from "../dtos/request/create-client.request.dto.js"
+import { updateClientRequestSchema } from "../dtos/request/update-client.request.dto.js"
 import { MethodNotAllowedException } from "../exceptions/method-not-allowed.exception.js"
 import { requireJsonContentType } from "../middlewares/require-json-content-type.middleware.js"
-import {
-  validateRequestBody,
-  validateRequestParameters,
-} from "../middlewares/validate-request.middleware.js"
-import { resourceIdentifierSchema, type ResourceIdentifierParameters } from "./resource-identifier.schema.js"
-
-/** Os cinco handlers que o controller de um recurso expoe ao roteador. */
-export interface CrudRouteHandlers {
-  list: RequestHandler
-  findById: RequestHandler<ResourceIdentifierParameters>
-  create: RequestHandler
-  update: RequestHandler<ResourceIdentifierParameters>
-  delete: RequestHandler<ResourceIdentifierParameters>
-}
-
-interface CrudRouteSchemas {
-  readonly createRequestSchema: ZodType
-  readonly updateRequestSchema: ZodType
-}
+import { validateRequestBody, validateRequestParameters } from "../middlewares/validate-request.middleware.js"
+import { resourceIdentifierSchema } from "./resource-identifier.schema.js"
 
 const COLLECTION_METHODS = ["GET", "POST", "OPTIONS"]
 const ITEM_METHODS = ["GET", "PUT", "DELETE", "OPTIONS"]
@@ -47,19 +32,13 @@ function rejectOtherMethods(allowedMethods: readonly string[]): RequestHandler {
   }
 }
 
-/**
- * Monta as rotas de um recurso REST.
- *
- * Os quatro recursos tem exatamente o mesmo desenho — muda so o controller e os
- * schemas de validacao. Descrever isso uma vez evita que os recursos divirjam em
- * silencio (um esquecer de validar o `:id`, por exemplo).
- */
-export function buildCrudRoutes(controller: CrudRouteHandlers, schemas: CrudRouteSchemas): Router {
+/** As cinco rotas do recurso cliente, com a validacao encadeada na ordem certa. */
+export function buildClientRoutes(controller: ClientController): Router {
   const router = Router()
   const validateIdentifier = validateRequestParameters(resourceIdentifierSchema)
 
   router.get("/", controller.list)
-  router.post("/", requireJsonContentType, validateRequestBody(schemas.createRequestSchema), controller.create)
+  router.post("/", requireJsonContentType, validateRequestBody(createClientRequestSchema), controller.create)
   router.all("/", rejectOtherMethods(COLLECTION_METHODS))
 
   router.get("/:id", validateIdentifier, controller.findById)
@@ -67,7 +46,7 @@ export function buildCrudRoutes(controller: CrudRouteHandlers, schemas: CrudRout
     "/:id",
     validateIdentifier,
     requireJsonContentType,
-    validateRequestBody(schemas.updateRequestSchema),
+    validateRequestBody(updateClientRequestSchema),
     controller.update,
   )
   router.delete("/:id", validateIdentifier, controller.delete)
