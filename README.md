@@ -67,26 +67,40 @@ Erro inesperado sempre vira `500` com `"An unexpected error occurred."` — mens
 
 ## Como rodar
 
-### Pré-requisitos
-
-- Node.js 22 ou superior
-- PostgreSQL em execução
-
-### 1. Criar o banco
+**Pré-requisitos:** Node.js 22+ e PostgreSQL em execução.
 
 ```bash
+git clone https://github.com/yvanshaw1/av1labdeprog5.git
+cd av1labdeprog5
+
 psql -U postgres -c "CREATE DATABASE av1labdeprog5;"
+
+cd frontend && npm install
+cd ../backend && npm install
+npm run migration:run
+npm run seed
+npm run demo
 ```
 
-### 2. Configurar o backend
+Abra **http://localhost:3000**. O site fica em `/` e a API em `/api/clients`.
 
-```bash
-cd backend && npm install
+### Se o seu PostgreSQL pedir senha
+
+Não há `.env` no repositório — ele guarda credencial. Os padrões são `localhost:5432`, usuário `postgres`, senha vazia e banco `av1labdeprog5`; se o seu for diferente (o instalador do Windows sempre define senha), crie `backend/.env`:
+
+```
+DATABASE_HOST=localhost
+DATABASE_PORT=5432
+DATABASE_USERNAME=postgres
+DATABASE_PASSWORD=sua_senha
+DATABASE_NAME=av1labdeprog5
 ```
 
-Copie `.env.example` para `.env`, preenchendo host, porta, usuário e senha do seu PostgreSQL.
+Se a conexão falhar, a própria API imprime no terminal o que tentou e o que fazer.
 
-### 3. Aplicar o schema
+### Passo a passo detalhado
+
+#### 1. Aplicar o schema
 
 ```bash
 cd backend && npm run migration:run
@@ -96,7 +110,7 @@ A migration cria a extensão `uuid-ossp` antes da tabela — é ela que fornece 
 
 Para gerar uma nova migration a partir das entidades: `npm run migration:generate`. O CLI do TypeORM escreve `import { MigrationInterface, QueryRunner }` — troque por `import type`, senão o ESM tenta importar em tempo de execução dois nomes que só existem como tipo.
 
-### 4. Popular o banco com dados de demonstração
+#### 2. Popular o banco com dados de demonstração
 
 ```bash
 cd backend && npm run seed
@@ -104,7 +118,7 @@ cd backend && npm run seed
 
 **Apaga o que existir antes** — serve tanto para o primeiro uso quanto para resetar entre testes.
 
-### 5. Modo demonstração: tudo numa porta só
+#### 3. Modo demonstração: tudo numa porta só
 
 ```bash
 cd backend && npm run demo
@@ -112,7 +126,7 @@ cd backend && npm run demo
 
 Compila o front, compila a API e sobe **um único servidor em `http://localhost:3000`**, com o site em `/` e a API em `/api`. Rotas inexistentes da API continuam respondendo Problem Details, e não a página.
 
-### 6. Modo desenvolvimento: dois servidores
+#### 4. Modo desenvolvimento: dois servidores
 
 ```bash
 cd backend  && npm run dev     # http://localhost:3000

@@ -1,3 +1,4 @@
+import { connectDatabase } from "./config/connect-database.js"
 import { appDataSource } from "./config/data-source.js"
 import { buildTypeOrmRepositories } from "./container.js"
 import { ClientServiceImpl } from "./services/impl/client.service.impl.js"
@@ -11,7 +12,7 @@ import { ClientServiceImpl } from "./services/impl/client.service.impl.js"
  * APAGA tudo o que existe antes de gravar.
  */
 async function seed(): Promise<void> {
-  await appDataSource.initialize()
+  await connectDatabase()
   const repositories = buildTypeOrmRepositories(appDataSource)
   const clientService = new ClientServiceImpl(repositories.clientRepository)
 
@@ -39,7 +40,6 @@ async function seed(): Promise<void> {
   await appDataSource.destroy()
 }
 
-seed().catch((error: unknown) => {
-  console.error("Falha ao repovoar o banco:", error)
+seed().catch(() => {
   process.exitCode = 1
 })
