@@ -30,6 +30,7 @@ export function ServicePage() {
           { header: "Duração", render: (service) => formatDuration(service.durationInMinutes) },
         ]}
         state={crud.listState}
+        resourcePath={serviceApi.path}
         getRowLabel={(service) => service.name}
         emptyMessage="Nenhum serviço cadastrado."
         onEdit={crud.startEditing}

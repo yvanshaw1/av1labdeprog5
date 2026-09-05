@@ -30,6 +30,7 @@ export function ClientPage() {
           { header: "Telefone", render: (client) => client.phoneNumber },
         ]}
         state={crud.listState}
+        resourcePath={clientApi.path}
         getRowLabel={(client) => client.fullName}
         emptyMessage="Nenhum cliente cadastrado."
         onEdit={crud.startEditing}

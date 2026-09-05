@@ -53,6 +53,7 @@ export function AppointmentPage() {
           { header: "Duração", render: (appointment) => formatDuration(appointment.totalDurationInMinutes) },
         ]}
         state={crud.listState}
+        resourcePath={appointmentApi.path}
         getRowLabel={(appointment) => licensePlateById.get(appointment.vehicleId) ?? appointment.id}
         emptyMessage="Nenhum agendamento cadastrado."
         onEdit={crud.startEditing}

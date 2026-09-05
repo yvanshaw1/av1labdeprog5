@@ -38,6 +38,7 @@ export function VehiclePage() {
           { header: "Cliente", render: (vehicle) => clientNameById.get(vehicle.clientId) ?? "—" },
         ]}
         state={crud.listState}
+        resourcePath={vehicleApi.path}
         getRowLabel={(vehicle) => vehicle.licensePlate}
         emptyMessage="Nenhum veículo cadastrado."
         onEdit={crud.startEditing}

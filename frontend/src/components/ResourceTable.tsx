@@ -9,6 +9,8 @@ export interface ResourceTableColumn<Entity> {
 interface ResourceTableProps<Entity> {
   columns: ResourceTableColumn<Entity>[]
   state: AsyncState<Entity[]>
+  /** Caminho do recurso na API, usado para montar o endereço de cada linha. */
+  resourcePath: string
   /** Vai no aria-label dos botões, para distinguir as ações de cada linha. */
   getRowLabel(entity: Entity): string
   emptyMessage: string
@@ -19,6 +21,7 @@ interface ResourceTableProps<Entity> {
 export function ResourceTable<Entity extends { id: string }>({
   columns,
   state,
+  resourcePath,
   getRowLabel,
   emptyMessage,
   onEdit,
@@ -72,6 +75,15 @@ export function ResourceTable<Entity extends { id: string }>({
               <button type="button" aria-label={`Excluir ${getRowLabel(row)}`} onClick={() => onDelete(row)}>
                 Excluir
               </button>
+              <a
+                className="row-endpoint"
+                href={`${resourcePath}/${row.id}`}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={`Endpoint de ${getRowLabel(row)}`}
+              >
+                Endpoint
+              </a>
             </td>
           </tr>
         ))}
