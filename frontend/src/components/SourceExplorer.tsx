@@ -25,7 +25,7 @@ export function SourceExplorer({ resource }: SourceExplorerProps) {
 
   return (
     <div className="source-explorer">
-      <nav className="source-tree" aria-label="Arquivos deste recurso">
+      <nav className="source-tree" aria-label="Arquivos da API deste recurso">
         {groups.map((group) => (
           <div key={group.label} className="source-tree-group">
             <p className="source-tree-label">{group.label}</p>

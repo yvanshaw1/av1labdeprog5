@@ -47,7 +47,7 @@ export function App() {
           {activeTab.render()}
         </section>
 
-        <aside className="workspace-code" aria-label="Código-fonte deste recurso">
+        <aside className="workspace-code" aria-label="Código-fonte da API">
           <SourceExplorer resource={activeTab.resource} />
         </aside>
       </div>
