@@ -1,7 +1,7 @@
 {
   "name": "av1labdeprog5-backend",
   "version": "1.0.0",
-  "description": "API de agendamento de estetica automotiva — AV01 de Laboratorio de Programacao V",
+  "description": "API de cadastro de cliente — AV01 de Laboratorio de Programacao V",
   "private": true,
   "type": "module",
   "engines": {

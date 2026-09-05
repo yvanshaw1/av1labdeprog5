@@ -1,13 +1,4 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from "typeorm"
-import { Appointment } from "./appointment.entity.js"
-import { Vehicle } from "./vehicle.entity.js"
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
 
 @Entity("clients")
 export class Client {
@@ -22,12 +13,6 @@ export class Client {
 
   @Column({ type: "varchar", length: 20 })
   phoneNumber!: string
-
-  @OneToMany(() => Vehicle, (vehicle) => vehicle.client)
-  vehicles!: Vehicle[]
-
-  @OneToMany(() => Appointment, (appointment) => appointment.client)
-  appointments!: Appointment[]
 
   @CreateDateColumn({ type: "timestamptz" })
   createdAt!: Date

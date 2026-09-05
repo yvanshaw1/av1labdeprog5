@@ -20,7 +20,6 @@ export const problemTypes = {
   payloadTooLarge: { type: "/problems/payload-too-large", title: "Payload Too Large" },
   unsupportedMediaType: { type: "/problems/unsupported-media-type", title: "Unsupported Media Type" },
   methodNotAllowed: { type: "/problems/method-not-allowed", title: "Method Not Allowed" },
-  businessRuleViolation: { type: "/problems/business-rule-violation", title: "Business Rule Violation" },
   routeNotFound: { type: "/problems/route-not-found", title: "Route Not Found" },
   internalServerError: { type: "/problems/internal-server-error", title: "Internal Server Error" },
 } as const satisfies Record<string, ProblemTypeDefinition>

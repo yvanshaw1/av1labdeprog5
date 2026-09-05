@@ -7,11 +7,9 @@
  * que existe justamente para o cliente tratar o erro sem depender do texto.
  */
 const MESSAGE_BY_PROBLEM_TYPE: Record<string, string> = {
-  "/problems/resource-in-use":
-    "Não foi possível excluir: este cadastro ainda está sendo usado. Remova antes os veículos ou agendamentos ligados a ele.",
-  "/problems/resource-already-exists": "Já existe um cadastro com esse valor. Confira os campos que não podem repetir.",
+  "/problems/resource-in-use": "Não foi possível excluir: este cadastro ainda está sendo usado.",
+  "/problems/resource-already-exists": "Já existe um cliente com esse e-mail.",
   "/problems/resource-not-found": "Este cadastro não existe mais. Atualize a página para ver a lista atual.",
-  "/problems/business-rule-violation": "O veículo escolhido não pertence ao cliente selecionado.",
   "/problems/malformed-request-body": "Não foi possível enviar os dados. Tente novamente.",
   "/problems/payload-too-large": "O conteúdo enviado é grande demais.",
   "/problems/unsupported-media-type": "Não foi possível enviar os dados. Tente novamente.",
@@ -25,19 +23,6 @@ const LABEL_BY_FIELD: Record<string, string> = {
   fullName: "Nome completo",
   email: "E-mail",
   phoneNumber: "Telefone",
-  licensePlate: "Placa",
-  make: "Marca",
-  model: "Modelo",
-  manufactureYear: "Ano de fabricação",
-  color: "Cor",
-  clientId: "Cliente",
-  vehicleId: "Veículo",
-  name: "Nome",
-  description: "Descrição",
-  price: "Preço",
-  durationInMinutes: "Duração",
-  scheduledFor: "Data e hora",
-  serviceIds: "Serviços",
   id: "Identificador",
   body: "Formulário",
 }

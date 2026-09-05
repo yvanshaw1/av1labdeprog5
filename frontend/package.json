@@ -1,7 +1,7 @@
 {
   "name": "av1labdeprog5-frontend",
   "version": "1.0.0",
-  "description": "Interface de agendamento de estetica automotiva, consumindo a API do AV01",
+  "description": "Interface de cadastro de cliente, consumindo a API do AV01",
   "private": true,
   "type": "module",
   "scripts": {

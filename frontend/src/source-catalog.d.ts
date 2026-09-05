@@ -9,6 +9,6 @@ declare module "virtual:source-catalog" {
     readonly files: readonly SourceFile[]
   }
 
-  /** Chaveado pelo recurso: "clients", "vehicles", "services", "appointments". */
-  export const sourceCatalog: Record<string, readonly SourceGroup[]>
+  /** Os arquivos da API, agrupados pelos critérios do enunciado. */
+  export const sourceCatalog: readonly SourceGroup[]
 }

@@ -2,11 +2,6 @@ import { useState } from "react"
 import { sourceCatalog, type SourceFile } from "virtual:source-catalog"
 import { CodeBlock } from "./CodeBlock.tsx"
 
-interface SourceExplorerProps {
-  /** Recurso da aba ativa: "clients", "vehicles", "services" ou "appointments". */
-  resource: string
-}
-
 function fileName(path: string): string {
   return path.slice(path.lastIndexOf("/") + 1)
 }
@@ -15,17 +10,14 @@ function directoryOf(path: string): string {
   return path.slice(0, path.lastIndexOf("/"))
 }
 
-export function SourceExplorer({ resource }: SourceExplorerProps) {
-  const groups = sourceCatalog[resource] ?? []
-  const files = groups.flatMap((group) => group.files)
+const ALL_FILES = sourceCatalog.flatMap((group) => group.files)
 
+export function SourceExplorer() {
   const [chosenPath, setChosenPath] = useState<string | undefined>(undefined)
   // Começam recolhidos: a lista inteira de uma vez esconde a divisão por critério.
   const [expandedGroups, setExpandedGroups] = useState<readonly string[]>([])
 
-  // Derivado, e não sincronizado: ao trocar de aba o arquivo escolhido pode não
-  // existir no novo recurso, e aí o primeiro da lista assume.
-  const openFile: SourceFile | undefined = files.find((file) => file.path === chosenPath) ?? files[0]
+  const openFile: SourceFile | undefined = ALL_FILES.find((file) => file.path === chosenPath) ?? ALL_FILES[0]
 
   function toggleGroup(label: string): void {
     setExpandedGroups((expanded) =>
@@ -35,8 +27,8 @@ export function SourceExplorer({ resource }: SourceExplorerProps) {
 
   return (
     <div className="source-explorer">
-      <nav className="source-tree" aria-label="Arquivos da API deste recurso">
-        {groups.map((group) => {
+      <nav className="source-tree" aria-label="Arquivos da API">
+        {sourceCatalog.map((group) => {
           const isExpanded = expandedGroups.includes(group.label)
 
           return (
@@ -76,7 +68,7 @@ export function SourceExplorer({ resource }: SourceExplorerProps) {
       </nav>
 
       {openFile === undefined ? (
-        <p className="source-empty">Nenhum arquivo para este recurso.</p>
+        <p className="source-empty">Nenhum arquivo no catálogo.</p>
       ) : (
         <div className="source-view">
           <p className="source-path">
