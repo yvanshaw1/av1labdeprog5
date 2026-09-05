@@ -1,4 +1,5 @@
 import { useState, type ReactNode } from "react"
+import { SourceExplorer } from "./components/SourceExplorer.tsx"
 import { AppointmentPage } from "./pages/AppointmentPage.tsx"
 import { ClientPage } from "./pages/ClientPage.tsx"
 import { ServicePage } from "./pages/ServicePage.tsx"
@@ -6,14 +7,16 @@ import { VehiclePage } from "./pages/VehiclePage.tsx"
 
 interface ResourceTab {
   label: string
+  /** Casa a aba com o recurso na API e com os arquivos mostrados ao lado. */
+  resource: string
   render(): ReactNode
 }
 
 const RESOURCE_TABS: ResourceTab[] = [
-  { label: "Clientes", render: () => <ClientPage /> },
-  { label: "Veículos", render: () => <VehiclePage /> },
-  { label: "Serviços", render: () => <ServicePage /> },
-  { label: "Agendamentos", render: () => <AppointmentPage /> },
+  { label: "Clientes", resource: "clients", render: () => <ClientPage /> },
+  { label: "Veículos", resource: "vehicles", render: () => <VehiclePage /> },
+  { label: "Serviços", resource: "services", render: () => <ServicePage /> },
+  { label: "Agendamentos", resource: "appointments", render: () => <AppointmentPage /> },
 ]
 
 export function App() {
@@ -38,8 +41,16 @@ export function App() {
         ))}
       </nav>
 
-      {/* A `key` descarta o estado da aba anterior ao trocar de recurso. */}
-      <section key={activeTab.label}>{activeTab.render()}</section>
+      <div className="workspace">
+        {/* A `key` descarta o estado da aba anterior ao trocar de recurso. */}
+        <section key={activeTab.label} className="workspace-app">
+          {activeTab.render()}
+        </section>
+
+        <aside className="workspace-code" aria-label="Código-fonte deste recurso">
+          <SourceExplorer resource={activeTab.resource} />
+        </aside>
+      </div>
     </main>
   )
 }
