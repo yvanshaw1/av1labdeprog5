@@ -17,16 +17,19 @@ function directoryOf(path: string): string {
 
 export function SourceExplorer({ resource }: SourceExplorerProps) {
   const groups = sourceCatalog[resource] ?? []
-  const [openPath, setOpenPath] = useState<string | undefined>(groups[0]?.files[0]?.path)
-  const [collapsedGroups, setCollapsedGroups] = useState<readonly string[]>([])
+  const files = groups.flatMap((group) => group.files)
 
-  const openFile: SourceFile | undefined = groups
-    .flatMap((group) => group.files)
-    .find((file) => file.path === openPath)
+  const [chosenPath, setChosenPath] = useState<string | undefined>(undefined)
+  // Começam recolhidos: a lista inteira de uma vez esconde a divisão por critério.
+  const [expandedGroups, setExpandedGroups] = useState<readonly string[]>([])
+
+  // Derivado, e não sincronizado: ao trocar de aba o arquivo escolhido pode não
+  // existir no novo recurso, e aí o primeiro da lista assume.
+  const openFile: SourceFile | undefined = files.find((file) => file.path === chosenPath) ?? files[0]
 
   function toggleGroup(label: string): void {
-    setCollapsedGroups((collapsed) =>
-      collapsed.includes(label) ? collapsed.filter((other) => other !== label) : [...collapsed, label],
+    setExpandedGroups((expanded) =>
+      expanded.includes(label) ? expanded.filter((other) => other !== label) : [...expanded, label],
     )
   }
 
@@ -34,31 +37,30 @@ export function SourceExplorer({ resource }: SourceExplorerProps) {
     <div className="source-explorer">
       <nav className="source-tree" aria-label="Arquivos da API deste recurso">
         {groups.map((group) => {
-          const isCollapsed = collapsedGroups.includes(group.label)
+          const isExpanded = expandedGroups.includes(group.label)
 
           return (
             <div key={group.label} className="source-tree-group">
               <button
                 type="button"
                 className="source-tree-label"
-                aria-expanded={!isCollapsed}
+                aria-expanded={isExpanded}
                 onClick={() => toggleGroup(group.label)}
               >
-                <span className={isCollapsed ? "source-chevron" : "source-chevron source-chevron-open"} aria-hidden />
+                <span className={isExpanded ? "source-chevron source-chevron-open" : "source-chevron"} aria-hidden />
                 {group.label}
               </button>
 
-              {isCollapsed
-                ? null
-                : group.files.map((file) => (
+              {isExpanded
+                ? group.files.map((file) => (
                     <button
                       key={file.path}
                       type="button"
                       className={
-                        file.path === openPath ? "source-tree-file source-tree-file-active" : "source-tree-file"
+                        file.path === openFile?.path ? "source-tree-file source-tree-file-active" : "source-tree-file"
                       }
-                      aria-current={file.path === openPath ? "true" : undefined}
-                      onClick={() => setOpenPath(file.path)}
+                      aria-current={file.path === openFile?.path ? "true" : undefined}
+                      onClick={() => setChosenPath(file.path)}
                       title={file.path}
                     >
                       <span className="source-file-icon" aria-hidden>
@@ -66,14 +68,15 @@ export function SourceExplorer({ resource }: SourceExplorerProps) {
                       </span>
                       {fileName(file.path)}
                     </button>
-                  ))}
+                  ))
+                : null}
             </div>
           )
         })}
       </nav>
 
       {openFile === undefined ? (
-        <p className="source-empty">Selecione um arquivo.</p>
+        <p className="source-empty">Nenhum arquivo para este recurso.</p>
       ) : (
         <div className="source-view">
           <p className="source-path">
