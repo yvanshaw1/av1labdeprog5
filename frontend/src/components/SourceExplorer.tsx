@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { sourceCatalog, type SourceFile } from "virtual:source-catalog"
+import { CodeBlock } from "./CodeBlock.tsx"
 
 interface SourceExplorerProps {
   /** Recurso da aba ativa: "clients", "vehicles", "services" ou "appointments". */
@@ -16,33 +17,59 @@ function directoryOf(path: string): string {
 
 export function SourceExplorer({ resource }: SourceExplorerProps) {
   const groups = sourceCatalog[resource] ?? []
-  const firstFile = groups[0]?.files[0]
-  const [openPath, setOpenPath] = useState<string | undefined>(firstFile?.path)
+  const [openPath, setOpenPath] = useState<string | undefined>(groups[0]?.files[0]?.path)
+  const [collapsedGroups, setCollapsedGroups] = useState<readonly string[]>([])
 
   const openFile: SourceFile | undefined = groups
     .flatMap((group) => group.files)
     .find((file) => file.path === openPath)
 
+  function toggleGroup(label: string): void {
+    setCollapsedGroups((collapsed) =>
+      collapsed.includes(label) ? collapsed.filter((other) => other !== label) : [...collapsed, label],
+    )
+  }
+
   return (
     <div className="source-explorer">
       <nav className="source-tree" aria-label="Arquivos da API deste recurso">
-        {groups.map((group) => (
-          <div key={group.label} className="source-tree-group">
-            <p className="source-tree-label">{group.label}</p>
-            {group.files.map((file) => (
+        {groups.map((group) => {
+          const isCollapsed = collapsedGroups.includes(group.label)
+
+          return (
+            <div key={group.label} className="source-tree-group">
               <button
-                key={file.path}
                 type="button"
-                className={file.path === openPath ? "source-tree-file source-tree-file-active" : "source-tree-file"}
-                aria-current={file.path === openPath ? "true" : undefined}
-                onClick={() => setOpenPath(file.path)}
-                title={file.path}
+                className="source-tree-label"
+                aria-expanded={!isCollapsed}
+                onClick={() => toggleGroup(group.label)}
               >
-                {fileName(file.path)}
+                <span className={isCollapsed ? "source-chevron" : "source-chevron source-chevron-open"} aria-hidden />
+                {group.label}
               </button>
-            ))}
-          </div>
-        ))}
+
+              {isCollapsed
+                ? null
+                : group.files.map((file) => (
+                    <button
+                      key={file.path}
+                      type="button"
+                      className={
+                        file.path === openPath ? "source-tree-file source-tree-file-active" : "source-tree-file"
+                      }
+                      aria-current={file.path === openPath ? "true" : undefined}
+                      onClick={() => setOpenPath(file.path)}
+                      title={file.path}
+                    >
+                      <span className="source-file-icon" aria-hidden>
+                        TS
+                      </span>
+                      {fileName(file.path)}
+                    </button>
+                  ))}
+            </div>
+          )
+        })}
       </nav>
 
       {openFile === undefined ? (
@@ -53,17 +80,7 @@ export function SourceExplorer({ resource }: SourceExplorerProps) {
             <span className="source-path-directory">{directoryOf(openFile.path)}/</span>
             {fileName(openFile.path)}
           </p>
-          <pre className="source-code">
-            <code>
-              {openFile.content.split("\n").map((line, index) => (
-                // A lista é estática e nunca reordena: o número da linha é o índice.
-                <span key={index} className="source-line">
-                  <span className="source-line-number">{index + 1}</span>
-                  <span className="source-line-text">{line}</span>
-                </span>
-              ))}
-            </code>
-          </pre>
+          <CodeBlock content={openFile.content} />
         </div>
       )}
     </div>

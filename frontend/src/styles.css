@@ -302,63 +302,116 @@ button:disabled {
 
 /* ─── Explorador de código ────────────────────────────────────────────────── */
 
+/* O painel tem paleta própria, fixa e escura: é um editor embutido, e não
+   acompanha o tema da aplicação — do mesmo jeito que uma IDE mantém o tema do
+   editor independente do sistema. */
 .source-explorer {
+  --editor-background: #1e1e1e;
+  --editor-sidebar: #181818;
+  --editor-border: #2b2b2b;
+  --editor-text: #d4d4d4;
+  --editor-muted: #858585;
+  --editor-active: #04395e;
+  --editor-accent: #4daafc;
+
   display: grid;
-  grid-template-columns: minmax(11rem, 15rem) 1fr;
-  border: 1px solid var(--color-border);
+  grid-template-columns: minmax(12rem, 16rem) 1fr;
+  border: 1px solid var(--editor-border);
   border-radius: 8px;
-  background: var(--color-surface);
+  background: var(--editor-background);
+  color: var(--editor-text);
   overflow: hidden;
   height: calc(100vh - 12rem);
   min-height: 30rem;
 }
 
 .source-tree {
-  border-right: 1px solid var(--color-border);
+  border-right: 1px solid var(--editor-border);
+  background: var(--editor-sidebar);
   overflow-y: auto;
   /* Item de grid nasce com min-height auto e nao encolhe: sem isto, cresce
      ate a altura do conteudo e a barra de rolagem nunca aparece. */
   min-height: 0;
   overscroll-behavior: contain;
-  padding: 0.5rem 0.4rem;
-  background: var(--color-background);
+  padding: 0.4rem 0;
 }
 
 .source-tree-group + .source-tree-group {
-  margin-top: 0.9rem;
+  margin-top: 0.5rem;
 }
 
 .source-tree-label {
-  margin: 0 0 0.3rem;
-  padding: 0 0.4rem;
-  font-size: 0.68rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  width: 100%;
+  padding: 0.3rem 0.5rem;
+  border: 0;
+  background: transparent;
+  color: var(--editor-muted);
+  font: inherit;
+  font-size: 0.66rem;
   text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: var(--color-muted);
+  letter-spacing: 0.06em;
+  text-align: left;
+  cursor: pointer;
+}
+
+.source-tree-label:hover {
+  color: var(--editor-text);
+}
+
+.source-chevron {
+  width: 0.55rem;
+  height: 0.55rem;
+  flex: none;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(-45deg);
+  transition: transform 120ms ease;
+}
+
+.source-chevron-open {
+  transform: rotate(45deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .source-chevron {
+    transition: none;
+  }
 }
 
 .source-tree-file {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
   width: 100%;
-  text-align: left;
-  padding: 0.28rem 0.45rem;
+  padding: 0.22rem 0.5rem 0.22rem 1.35rem;
   border: 0;
-  border-radius: 4px;
+  border-left: 2px solid transparent;
   background: transparent;
-  color: var(--color-text);
+  color: var(--editor-text);
   font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
-  font-size: 0.76rem;
+  font-size: 0.75rem;
+  text-align: left;
   cursor: pointer;
 }
 
 .source-tree-file:hover {
-  background: var(--color-surface);
+  background: #2a2d2e;
 }
 
 .source-tree-file-active {
-  background: var(--color-surface);
-  color: var(--color-accent);
-  font-weight: 600;
+  background: var(--editor-active);
+  border-left-color: var(--editor-accent);
+}
+
+.source-file-icon {
+  flex: none;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #3178c6;
 }
 
 .source-view {
@@ -370,17 +423,18 @@ button:disabled {
 
 .source-path {
   margin: 0;
-  padding: 0.5rem 0.75rem;
-  border-bottom: 1px solid var(--color-border);
+  padding: 0.45rem 0.75rem;
+  border-bottom: 1px solid var(--editor-border);
+  background: var(--editor-sidebar);
   font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
-  font-size: 0.72rem;
-  color: var(--color-text);
+  font-size: 0.7rem;
+  color: var(--editor-text);
   white-space: nowrap;
   overflow-x: auto;
 }
 
 .source-path-directory {
-  color: var(--color-muted);
+  color: var(--editor-muted);
 }
 
 .source-code {
@@ -410,8 +464,8 @@ button:disabled {
 
 .source-line-number {
   text-align: right;
-  color: var(--color-muted);
-  opacity: 0.6;
+  color: var(--editor-muted);
+  opacity: 0.65;
   /* Fora da selecao: copiar o codigo nao leva a numeracao junto. */
   user-select: none;
 }
@@ -426,5 +480,50 @@ button:disabled {
 
 .source-empty {
   padding: 1.5rem;
-  color: var(--color-muted);
+  color: var(--editor-muted);
+}
+
+/* ─── Cores do código (paleta Dark+ do VS Code) ───────────────────────────── */
+
+.token.comment {
+  color: #6a9955;
+}
+
+.token.string,
+.token.template-string,
+.token.regex {
+  color: #ce9178;
+}
+
+.token.number,
+.token.boolean {
+  color: #b5cea8;
+}
+
+.token.keyword {
+  color: #569cd6;
+}
+
+.token.builtin,
+.token.class-name {
+  color: #4ec9b0;
+}
+
+.token.function {
+  color: #dcdcaa;
+}
+
+.token.decorator,
+.token.punctuation.decorator {
+  color: #dcdcaa;
+}
+
+.token.operator,
+.token.punctuation {
+  color: #d4d4d4;
+}
+
+.token.property,
+.token.constant {
+  color: #9cdcfe;
 }
