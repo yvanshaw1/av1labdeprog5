@@ -316,6 +316,10 @@ button:disabled {
 .source-tree {
   border-right: 1px solid var(--color-border);
   overflow-y: auto;
+  /* Item de grid nasce com min-height auto e nao encolhe: sem isto, cresce
+     ate a altura do conteudo e a barra de rolagem nunca aparece. */
+  min-height: 0;
+  overscroll-behavior: contain;
   padding: 0.5rem 0.4rem;
   background: var(--color-background);
 }
@@ -358,9 +362,10 @@ button:disabled {
 }
 
 .source-view {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: auto 1fr;
   min-width: 0;
+  min-height: 0;
 }
 
 .source-path {
@@ -382,7 +387,8 @@ button:disabled {
   margin: 0;
   padding: 0.6rem 0;
   overflow: auto;
-  flex: 1;
+  min-height: 0;
+  overscroll-behavior: contain;
   font-size: 0.74rem;
   line-height: 1.55;
   tab-size: 2;
