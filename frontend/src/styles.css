@@ -399,20 +399,29 @@ button:disabled {
   font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
 }
 
+/* Numero e codigo em colunas proprias: assim a linha quebra alinhada ao inicio
+   do codigo, e nao embaixo do numero. */
 .source-line {
-  display: block;
-  white-space: pre;
+  display: grid;
+  grid-template-columns: 2.6rem minmax(0, 1fr);
+  gap: 0.75rem;
   padding-right: 0.75rem;
 }
 
 .source-line-number {
-  display: inline-block;
-  width: 2.6rem;
-  padding-right: 0.75rem;
   text-align: right;
   color: var(--color-muted);
   opacity: 0.6;
+  /* Fora da selecao: copiar o codigo nao leva a numeracao junto. */
   user-select: none;
+}
+
+.source-line-text {
+  /* `pre-wrap` preserva a indentacao e ainda quebra; `anywhere` corta tambem
+     identificadores longos, que senao reintroduziriam a rolagem lateral. */
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  min-width: 0;
 }
 
 .source-empty {

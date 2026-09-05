@@ -59,7 +59,7 @@ export function SourceExplorer({ resource }: SourceExplorerProps) {
                 // A lista é estática e nunca reordena: o número da linha é o índice.
                 <span key={index} className="source-line">
                   <span className="source-line-number">{index + 1}</span>
-                  {line}
+                  <span className="source-line-text">{line}</span>
                 </span>
               ))}
             </code>
