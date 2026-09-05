@@ -1,4 +1,5 @@
 import { clientApi, type Client } from "../api/client-api.ts"
+import { ApiEndpointLink } from "../components/ApiEndpointLink.tsx"
 import { ClientForm } from "../components/ClientForm.tsx"
 import { ErrorBanner } from "../components/ErrorBanner.tsx"
 import { ResourceTable } from "../components/ResourceTable.tsx"
@@ -9,6 +10,8 @@ export function ClientPage() {
 
   return (
     <>
+      <ApiEndpointLink path={clientApi.path} />
+
       <ErrorBanner message={crud.errorMessage} />
 
       {/* A `key` remonta o formulário ao trocar de cliente ou após gravar,

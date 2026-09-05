@@ -2,6 +2,8 @@ import { requestJson } from "./http.ts"
 
 /** As quatro operações que todo recurso da API expõe. */
 export interface ResourceApi<Entity, Input> {
+  /** Caminho do recurso na API. Exposto para que a tela possa mostrá-lo. */
+  readonly path: string
   list(): Promise<Entity[]>
   create(input: Input): Promise<Entity>
   update(id: string, input: Input): Promise<Entity>
@@ -14,6 +16,7 @@ export interface ResourceApi<Entity, Input> {
  */
 export function createResourceApi<Entity, Input>(resourcePath: string): ResourceApi<Entity, Input> {
   return {
+    path: resourcePath,
     list: () => requestJson<Entity[]>(resourcePath),
     create: (input) => requestJson<Entity>(resourcePath, "POST", input),
     update: (id, input) => requestJson<Entity>(`${resourcePath}/${id}`, "PUT", input),

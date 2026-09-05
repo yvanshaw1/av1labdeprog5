@@ -1,4 +1,5 @@
 import { serviceApi, type Service } from "../api/service-api.ts"
+import { ApiEndpointLink } from "../components/ApiEndpointLink.tsx"
 import { ErrorBanner } from "../components/ErrorBanner.tsx"
 import { ResourceTable } from "../components/ResourceTable.tsx"
 import { ServiceForm } from "../components/ServiceForm.tsx"
@@ -10,6 +11,8 @@ export function ServicePage() {
 
   return (
     <>
+      <ApiEndpointLink path={serviceApi.path} />
+
       <ErrorBanner message={crud.errorMessage} />
 
       <ServiceForm

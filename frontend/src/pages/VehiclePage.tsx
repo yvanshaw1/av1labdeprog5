@@ -1,5 +1,6 @@
 import { clientApi } from "../api/client-api.ts"
 import { vehicleApi, type Vehicle } from "../api/vehicle-api.ts"
+import { ApiEndpointLink } from "../components/ApiEndpointLink.tsx"
 import { ErrorBanner } from "../components/ErrorBanner.tsx"
 import { ResourceTable } from "../components/ResourceTable.tsx"
 import { VehicleForm } from "../components/VehicleForm.tsx"
@@ -14,6 +15,8 @@ export function VehiclePage() {
 
   return (
     <>
+      <ApiEndpointLink path={vehicleApi.path} />
+
       <ErrorBanner message={crud.errorMessage ?? clients.errorMessage} />
 
       <VehicleForm

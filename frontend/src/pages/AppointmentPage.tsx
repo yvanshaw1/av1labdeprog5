@@ -2,6 +2,7 @@ import { appointmentApi, type Appointment } from "../api/appointment-api.ts"
 import { clientApi } from "../api/client-api.ts"
 import { serviceApi } from "../api/service-api.ts"
 import { vehicleApi } from "../api/vehicle-api.ts"
+import { ApiEndpointLink } from "../components/ApiEndpointLink.tsx"
 import { AppointmentForm } from "../components/AppointmentForm.tsx"
 import { ErrorBanner } from "../components/ErrorBanner.tsx"
 import { ResourceTable } from "../components/ResourceTable.tsx"
@@ -24,6 +25,8 @@ export function AppointmentPage() {
 
   return (
     <>
+      <ApiEndpointLink path={appointmentApi.path} />
+
       <ErrorBanner message={errorMessage} />
 
       <AppointmentForm
